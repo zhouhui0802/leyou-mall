@@ -1,0 +1,51 @@
+问题1：
+如何一个服务开启两个不同端口的eureka
+配置三个文件
+application.yml
+spring:
+  application:
+    name: eureka-server
+  profiles:
+    active: server1
+
+application-server1.yml
+server:
+  port: 10086 # 端口
+eureka:
+  instance:
+    hostname: server1
+  client:
+    #register-with-eureka: false # 是否注册自己的信息到EurekaServer，默认是true
+    #fetch-registry: false # 是否拉取其它服务的信息，默认是true
+    service-url: # EurekaServer的地址，现在是自己的地址，如果是集群，需要加上其它Server的地址。
+      defaultZone: http://server2:10087/eureka
+
+application-server2.yml
+server:
+  port: 10087 # 端口
+eureka:
+  instance:
+    hostname: server2
+  client:
+    #register-with-eureka: false # 是否注册自己的信息到EurekaServer，默认是true
+    #fetch-registry: false # 是否拉取其它服务的信息，默认是true
+    service-url: # EurekaServer的地址，现在是自己的地址，如果是集群，需要加上其它Server的地址。
+      defaultZone: http://server1:10086/eureka
+
+然后在IDEA中选择
+ADD VM Options
+添加内容  指向不同的配置文件
+-Dspring.profiles.active=server2
+-Dspring.profiles.active=server1
+
+
+相同的的SpringBoot用不同的端口号启动
+然后在IDEA中选择
+ADD VM Options
+添加内容  指向不同的配置文件
+-Dserver.port=8082
+-Dserver.port=8081
+
+在Windows系统中的C:\Windows\System32\drivers\etc路径下的host文件，添加内容
+127.0.0.1 server1
+127.0.0.1 server2

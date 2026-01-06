@@ -8,12 +8,25 @@ spring:
       minimum-idle: 10
   application:
     name: consumer
+  cloud:
+    loadbalancer:
+      retry:
+        enabled: true # 开启Spring Cloud的重试功能
 mybatis:
   type-aliases-package: com.zh.pojo
 eureka:
   client:
     service-url: # EurekaServer地址
-      defaultZone: http://localhost:10086/eureka
+      defaultZone: http://localhost:10086/eureka,http://localhost:10087/eureka
   instance:
     prefer-ip-address: true # 当其它服务获取地址时提供ip而不是hostname
     ip-address: localhost # 指定自己的ip信息，不指定的话会自己寻找
+
+user-service:
+  ribbon:
+    NFLoadBalancerRuleClassName: com.netflix.loadbalancer.RandomRule  #在配置文件中，将负载均衡改为随机模式
+    ConnectTimeout: 250 # Ribbon的连接超时时间
+    ReadTimeout: 1000 # Ribbon的数据读取超时时间
+    OkToRetryOnAllOperations: true # 是否对所有操作都进行重试
+    MaxAutoRetriesNextServer: 1 # 切换实例的重试次数
+    MaxAutoRetries: 1 # 对当前实例的重试次数

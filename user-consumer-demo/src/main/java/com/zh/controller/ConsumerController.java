@@ -26,6 +26,7 @@ public class ConsumerController {
 
     @GetMapping
     public List<User> consume(@RequestParam("ids") List<Long> ids) {
+
         return this.userConsumerService.querUserByIds(ids);
     }
     //URL访问方式： http://localhost:8080/consume?ids=6,7,8

@@ -25,6 +25,7 @@ public class UserController {
 
     @GetMapping("/{id}")
     public User queryById(@PathVariable("id") Long id) {
+        System.out.println("开启负载均衡了");
         return this.userService.queryById(id);
     }
 }
