@@ -4,6 +4,7 @@ package com.zh.service;
 
 
 
+import com.zh.dao.UserDao;
 import com.zh.pojo.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.client.ServiceInstance;
@@ -30,6 +31,9 @@ public class UserService {
     @Autowired
     private DiscoveryClient discoveryClient;// Eureka客户端，可以获取到服务实例信息
 
+    @Autowired
+    private UserDao userDao;
+
     public List<User> querUserByIds(List<Long> ids){
 
         /*  这是还没有负载均衡的写法
@@ -44,6 +48,7 @@ public class UserService {
 
         */
 
+        /*     注册eureka之后的写法
         List<User> users = new ArrayList<>();
         // 地址直接写服务名称即可
         String baseUrl = "http://user-service/user/";
@@ -57,6 +62,15 @@ public class UserService {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
+        });
+         */
+
+
+        //有了熔断之后的写法
+        List<User> users = new ArrayList<>();
+        ids.forEach(id -> {
+            // 我们测试多次查询，
+            users.add(this.userDao.queryUserById(id));
         });
 
 
