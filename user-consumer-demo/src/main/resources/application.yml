@@ -22,6 +22,7 @@ eureka:
     prefer-ip-address: true # 当其它服务获取地址时提供ip而不是hostname
     ip-address: localhost # 指定自己的ip信息，不指定的话会自己寻找
 
+# Openfeign中也可以使用同样的配置调用 负载均衡
 user-service:
   ribbon:
     NFLoadBalancerRuleClassName: com.netflix.loadbalancer.RandomRule  #在配置文件中，将负载均衡改为随机模式
@@ -31,10 +32,17 @@ user-service:
     MaxAutoRetriesNextServer: 1 # 切换实例的重试次数
     MaxAutoRetries: 1 # 对当前实例的重试次数
 
-hystrix:
-  command:
-    default:
-      execution:
-        isolation:
-          thread:
-            timeoutInMillisecond: 6000 # 设置hystrix的超时时间为6000ms
+#单独开启Hystix的方法
+#hystrix:
+#  command:
+#    default:
+#      execution:
+#        isolation:
+#          thread:
+#            timeoutInMillisecond: 6000 # 设置hystrix的超时时间为6000ms
+
+# 从OpenFeign中开启hystrix熔断
+feign:
+  hystrix:
+    enabled: true  # 开启Feign的熔断功能
+

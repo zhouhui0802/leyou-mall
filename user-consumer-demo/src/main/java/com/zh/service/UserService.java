@@ -4,15 +4,12 @@ package com.zh.service;
 
 
 
-import com.zh.dao.UserDao;
+import com.zh.dao.UserFeignClient;
 import com.zh.pojo.User;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 
-import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,14 +22,17 @@ import java.util.List;
 @Service
 public class UserService {
 
-    @Autowired
-    private RestTemplate restTemplate;
+/*    @Autowired
+    private RestTemplate restTemplate;*/
 
     @Autowired
     private DiscoveryClient discoveryClient;// Eureka客户端，可以获取到服务实例信息
 
+/*    @Autowired
+    private UserDao userDao;*/
+
     @Autowired
-    private UserDao userDao;
+    private UserFeignClient userFeignClient;
 
     public List<User> querUserByIds(List<Long> ids){
 
@@ -65,14 +65,21 @@ public class UserService {
         });
          */
 
-
+        /*
         //有了熔断之后的写法
         List<User> users = new ArrayList<>();
         ids.forEach(id -> {
             // 我们测试多次查询，
             users.add(this.userDao.queryUserById(id));
         });
+        */
 
+        // OpenFeign的写法
+        List<User> users = new ArrayList<>();
+        ids.forEach(id -> {
+            // 我们测试多次查询，
+            users.add(this.userFeignClient.queryUserById(id));
+        });
 
         return users;
     }
