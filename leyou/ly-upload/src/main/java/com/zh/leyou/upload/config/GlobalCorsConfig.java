@@ -1,38 +1,32 @@
-package com.zh.leyou.config;
+package com.zh.leyou.upload.config;
 
 
-/**
- * @author zhouhui
- * @version 1.0
- * @description TODO
- * @date 2026/1/8 9:42
- */
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
 
+/**
+ * @author zhouhui
+ * @version 1.0
+ * @description TODO
+ * @date 2026/1/12 9:44
+ */
 @Configuration
-public class LeyouCorsConfiguration {
+public class GlobalCorsConfig {
+
     @Bean
     public CorsFilter corsFilter() {
         //1.添加CORS配置信息
         CorsConfiguration config = new CorsConfiguration();
         //1) 允许的域,不要写*，否则cookie就无法使用了
         config.addAllowedOrigin("http://manage.leyou.com");
-        //config.addAllowedOrigin("http://localhost:9001");
         //2) 是否发送Cookie信息
-        config.setAllowCredentials(true);
+        config.setAllowCredentials(false);
         //3) 允许的请求方式
         config.addAllowedMethod("OPTIONS");
-        config.addAllowedMethod("HEAD");
-        config.addAllowedMethod("GET");
-        config.addAllowedMethod("PUT");
         config.addAllowedMethod("POST");
-        config.addAllowedMethod("DELETE");
-        config.addAllowedMethod("PATCH");
-        // 4）允许的头信息
         config.addAllowedHeader("*");
 
         //2.添加映射路径，我们拦截一切请求

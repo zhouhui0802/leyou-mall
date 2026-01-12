@@ -2,7 +2,9 @@ package com.zh.item.mapper;
 
 
 import com.zh.item.pojo.Brand;
+import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 /**
  * @author zhouhui
@@ -12,4 +14,13 @@ import org.apache.ibatis.annotations.Mapper;
  */
 @Mapper
 public interface BrandMapper extends tk.mybatis.mapper.common.Mapper<Brand> {
+
+    /**
+     * 新增商品分类和品牌中间表数据
+     * @param cid 商品分类id
+     * @param bid 品牌id
+     * @return
+     */
+    @Insert("INSERT INTO tb_category_brand (category_id, brand_id) VALUES (#{cid},#{bid})")
+    int insertCategoryBrand(@Param("cid") Long cid, @Param("bid") Long bid);
 }
